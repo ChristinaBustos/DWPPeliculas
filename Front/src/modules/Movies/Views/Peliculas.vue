@@ -11,38 +11,29 @@
         <b-icon icon="plus"></b-icon> Agregar pelicula
       </b-button>
     </div>
-
+    <br>
     <div>
-      <b-row>
-        <b-col>
-          <div>
-            <b-card title="Card Title" style="max-width: 20remm,max-height: 20remm " class="mb-2">
-              <b-card-text>
-                The Avengers (The Avengers: Los Vengadores en América Hispana y Marvel Los Vengadores en España) es una
-                película de superhéroes basada en el equipo de superhéroes de Marvel Comics del mismo nombre. También es
-                un cruce/secuela entre Iron Man, The Incredible Hulk, Iron Man 2, Thor y Captain America: The First
-                Avenger.
-              </b-card-text>
-            
-              <b-button href="#" variant="primary">Ver info</b-button>
-            </b-card>
-          </div>
+      <b-row v-if="data && data.data">
+        <b-col v-for="(movie, index) in data.data" :key="index" lg="3" md="6" sm="12">
+          <b-card :title="movie.name" style="max-width: 20rem; height: 15rem" class="mb-2">
+            <b-card-text>
+              <b>Género:</b> {{ movie.genero }}<br>
+              <b>Descripción:</b> {{ movie.description }}<br>
+            </b-card-text>
+
+          </b-card>
         </b-col>
-        <b-col>2</b-col>
-        <b-col>3</b-col>
       </b-row>
-
-      <button @click="fetchData">Obtener datos de la API</button>
     </div>
-
 
     <ModalSaveMovie />
   </div>
 </template>
-  
+
 <script>
 import ModalSaveMovie from '@/modules/Movies/Views/ModalSaveMovie.vue'
 import axios from 'axios'
+
 export default {
   components: { ModalSaveMovie },
   name: "pelis",
@@ -53,19 +44,22 @@ export default {
   },
   methods: {
     fetchData() {
-
-      axios.get('https://pokeapi.co/api/v2/pokemon/').then(response => {
-        this.data = response.data;
-        console.log(this.data.results);
-      })
+      axios.get('http://localhost:8090/api-movieBack/')
+        .then(response => {
+          console.log(response.data.data);
+          this.data = response.data;
+        })
         .catch(error => {
           console.error('Error al obtener datos de la API', error);
         });
-    }
-  }
+    },
+  },
+  mounted() {
+    this.fetchData();
+  },
 };
 </script>
-  
+
 <style scoped>
 .body {
   padding-left: 50px;
@@ -78,6 +72,6 @@ export default {
 }
 
 .btnadd {
-  background-color: #089779; 
+  background-color: #089779;
 }
 </style>

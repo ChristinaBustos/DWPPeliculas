@@ -46,7 +46,7 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+import axios from 'axios'
 export default {
     name: "modal-save-movie",
 
@@ -93,17 +93,16 @@ export default {
                 if (result.isConfirmed) {
                     try {
                         console.log(this.pelicula);
+                        await axios.post("http://localhost:8090/api-movieBack/", this.pelicula);
                         Swal.fire({
                             title: "¡Guardada!",
                             text: "La pelicula se registró correctamente",
                             icon: "success"
                         });
-                        this.pelicula.name = ""
-                        this.pelicula.description = ""
-                        this.pelicula.genero = null
                         this.onClose();
+                        window.location.reload();
                     } catch (error) {
-
+                        console.log("Error al guardar la pelicula", error);
                     }
 
                 }

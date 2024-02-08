@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api-movieBack")
-
+@CrossOrigin(origins = "*")
 public class PeliculaController {
     @Autowired
     PeliculaService service;
