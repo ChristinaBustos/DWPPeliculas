@@ -8,7 +8,7 @@
 
     <div class="bodybutton">
       <b-button v-b-modal.modal-save-movie class="btnadd">
-        <b-icon icon="plus"></b-icon> Agregar pelicula
+        <b-icon icon="camera-reels"></b-icon> Registrar pelicula
       </b-button>
     </div>
     <br>
@@ -21,6 +21,11 @@
               <b>Descripción:</b> {{ movie.description }}<br>
             </b-card-text>
 
+            <template  #footer>
+            <div class="icono">
+              <b-button variant="faded" @click="edit"><b-icon icon="pencil"></b-icon></b-button>
+            </div>
+            </template>
           </b-card>
         </b-col>
       </b-row>
@@ -53,6 +58,10 @@ export default {
           console.error('Error al obtener datos de la API', error);
         });
     },
+
+    edit(){
+      console.log("Jala el boton para editar xd");
+    }
   },
   mounted() {
     this.fetchData();
@@ -73,5 +82,9 @@ export default {
 
 .btnadd {
   background-color: #089779;
+}
+
+.icono {
+  text-align: end;
 }
 </style>
