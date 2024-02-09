@@ -1,32 +1,29 @@
 <template>
   <div class="body">
 
-    <br>
-      <template>
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <b>
-              <h3>Peliculas <b-icon icon="camera-reels"></b-icon></h3> 
-            </b>
-          </div>
-          <div class="bodybutton">
-            <b-button v-b-modal.modal-save-movie class="btnadd">
-              <b-icon icon="plus"></b-icon> Registrar pelicula
-            </b-button>
-          </div>
+    <template>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <b>
+            <h3>Peliculas <b-icon icon="camera-reels"></b-icon></h3>
+          </b>
         </div>
-      </template>
-    <div class="">
-      <br>
-      <b-row v-if="data && data.data && data.data.length > 0">
-        <b-col v-for="(movie, index) in data.data" :key="index" lg="3" md="6" sm="12">
-          <b-card :title="movie.name" style="max-width: 20rem; height: 17rem" class="mb-2">
+        <div class="bodybutton">
+          <b-button v-b-modal.modal-save-movie class="btnadd">
+            <b-icon icon="plus"></b-icon> Registrar pelicula
+          </b-button>
+        </div>
+      </div>
+    </template>
 
+    <div class="mb-4">
+      <b-row v-if="data && data.data && data.data.length > 0">
+        <b-col v-for="(movie, index) in paginatedItems" :key="index" lg="3" md="6" sm="12">
+          <b-card :title="movie.name" style="max-width: 20rem; height: 17rem" class="mb-2">
             <b-card-text class="card-text-scroll">
               <b>Género:</b> {{ movie.genero }}<br>
               <b>Descripción:</b> {{ movie.description }}<br>
             </b-card-text>
-
             <template #footer>
               <div class="icono">
                 <b-button variant="faded" @click="OpenEditModal(movie)"><b-icon icon="pencil"></b-icon></b-button>
@@ -37,8 +34,23 @@
           </b-card>
         </b-col>
       </b-row>
-      <div class="text-center" v-else>
+
+      <div class="text-center" v-if="!paginatedItems.length">
         <p>No se encontraron películas registradas</p>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="my-table"
+          class="mt-3"></b-pagination>
+
+        <p class="mt-3">Página actual: {{ currentPage }}</p>
+      </div>
+
+      <div class="mb-3">
+        <label for="perPageSelect" class="mr-2">Películas por página:</label>
+        <b-form-select v-model="perPage" id="perPageSelect" :options="perPageOptions"></b-form-select>
       </div>
     </div>
 
@@ -61,6 +73,19 @@ export default {
     return {
       data: null,
       selectedMovie: null,
+      perPage: 4, 
+      currentPage: 1,
+      perPageOptions: [4, 8, 12, 16]
+    }
+  },
+  computed: {
+    rows() {
+      return this.data ? this.data.data.length : 0;
+    },
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.data ? this.data.data.slice(start, end) : [];
     }
   },
   methods: {
@@ -73,14 +98,10 @@ export default {
           console.error('Error al obtener datos de la API', error);
         });
     },
-
-
     OpenEditModal(movie) {
       this.selectedMovie = movie;
-      console.log("Props enviadas: ", movie);
       this.$bvModal.show('modal-update-movie');
     },
-
     async deleteMovie(id) {
       const confirmed = await Swal.fire({
         title: "¿Estás seguro de eliminar la película?",
@@ -106,7 +127,7 @@ export default {
             this.fetchData();
           }
         } catch (error) {
-          const { data } = error
+          const { data } = error;
           this.$swal.fire({
             icon: "error",
             text: data?.text ? data.text : "Error interno",
@@ -116,7 +137,6 @@ export default {
       }
     },
   },
-
   mounted() {
     this.fetchData();
   },
@@ -136,7 +156,6 @@ export default {
 
 .btnadd {
   background-color: #089779;
-
 }
 
 .icono {

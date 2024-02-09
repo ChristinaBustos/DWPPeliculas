@@ -68,6 +68,7 @@ export default {
                 { value: "Comedia", text: "Comedia" },
                 { value: "Documentales", text: "Documentales" },
                 { value: "Drama", text: "Drama" },
+                { value: 'Infantil', text: 'Infantil' },
             ],
             
         };
