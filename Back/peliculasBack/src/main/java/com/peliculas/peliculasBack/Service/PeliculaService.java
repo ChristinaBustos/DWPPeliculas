@@ -40,4 +40,45 @@ public class PeliculaService {
         );
     }
 
+    //Validar que existe el id
+    @Transactional(rollbackFor = {SQLException.class})
+    public CustomResponse<Pelicula> update(Pelicula peli){
+        if(!this.repository.existsById(peli.getId())){
+            return new CustomResponse<>(
+                    null,
+                    true,
+                    400,
+                    "La peli no existe"
+            );
+        }
+        return new CustomResponse<>(
+                this.repository.saveAndFlush(peli),
+                false,
+                200,
+                "Pelicula actualizada!"
+        );
+    }
+
+    @Transactional
+    public CustomResponse<Pelicula> delete(Long id) {
+        Optional<Pelicula> peliculaOptional = repository.findById(id);
+
+        if (!peliculaOptional.isPresent()) {
+            return new CustomResponse<>(
+                    null,
+                    true,
+                    400,
+                    "La película no existe"
+            );
+        }
+
+        repository.deleteById(id);
+        return new CustomResponse<>(
+                null,
+                false,
+                200,
+                "Pelicula eliminada!"
+        );
+    }
+
 }
