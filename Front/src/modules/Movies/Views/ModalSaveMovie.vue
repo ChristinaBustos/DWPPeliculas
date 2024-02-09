@@ -11,9 +11,15 @@
                         <b-row>
                             <b-col>
                                 <label for="pelicula">Nombre de la pelicula: *</label>
-                                <b-form-input v-model="pelicula.name" type="text" class="form-control"
-                                    placeholder="Pelicula..." required
+                                <b-form-input :state="validationName" v-model="pelicula.name" type="text"
+                                    class="form-control" placeholder="Pelicula..." required
                                     aria-describedby="input-live-help input-live-feedback" />
+                                <b-form-invalid-feedback :state="validationName">
+                                    No puedes dejar campos vacios y el tamaño debe ser menor a 160
+                                </b-form-invalid-feedback>
+                                <b-form-valid-feedback :state="validationName">
+                                    Bien.
+                                </b-form-valid-feedback>
                             </b-col>
                             <b-col>
                                 <label for="pelicula">Genero de la pelicula: *</label>
@@ -70,7 +76,7 @@ export default {
                 { value: "Drama", text: "Drama" },
                 { value: 'Infantil', text: 'Infantil' },
             ],
-            
+
         };
     },
     methods: {
@@ -110,8 +116,20 @@ export default {
             });
         },
 
-        
+
     },
+    computed: {
+        validationName() {
+            const nameRegex = /^(?!.* {2,})[a-zA-Z]+(?: [a-zA-Z]+)*$/;
+            return (
+                this.pelicula.name.trim().length > 0 &&
+                this.pelicula.name.trim().length < 160 &&
+                nameRegex.test(this.pelicula.name.trim()) &&
+                !this.pelicula.name.startsWith(' ') &&
+                !this.pelicula.name.endsWith(' ')
+            );
+        }
+    }
 
 }
 </script>

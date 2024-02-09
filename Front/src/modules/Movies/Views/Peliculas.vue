@@ -18,7 +18,7 @@
 
     <div class="mb-4">
       <b-row v-if="data && data.data && data.data.length > 0">
-        <b-col v-for="(movie, index) in paginatedItems" :key="index" lg="3" md="6" sm="12">
+        <b-col v-for="(movie, index) in paginatedItems" :key="index" lg="3" md="3" sm="6">
           <b-card :title="movie.name" style="max-width: 20rem; height: 17rem" class="mb-2">
             <b-card-text class="card-text-scroll">
               <b>Género:</b> {{ movie.genero }}<br>
@@ -150,12 +150,10 @@ export default {
   margin-top: 20px;
 }
 
-.bodybutton {
-  text-align: end;
-}
 
 .btnadd {
   background-color: #089779;
+  padding-right: px;
 }
 
 .icono {
