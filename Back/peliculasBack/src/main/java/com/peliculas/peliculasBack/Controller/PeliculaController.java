@@ -52,14 +52,7 @@ public class PeliculaController {
     }
 
     @DeleteMapping("/peliculas/{id}")
-    public ResponseEntity<CustomResponse<Pelicula>> delete(
-            @PathVariable Long id, @Valid BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(
-                    null,
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+    public ResponseEntity<CustomResponse<Pelicula>> delete(@PathVariable Long id) {
         return new ResponseEntity<>(
                 this.service.delete(id),
                 HttpStatus.CREATED

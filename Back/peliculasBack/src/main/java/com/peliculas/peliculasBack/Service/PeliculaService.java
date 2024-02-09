@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @Transactional
 public class PeliculaService {
@@ -59,26 +62,37 @@ public class PeliculaService {
         );
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(PeliculaService.class);
     @Transactional
     public CustomResponse<Pelicula> delete(Long id) {
-        Optional<Pelicula> peliculaOptional = repository.findById(id);
+        try {
+            Optional<Pelicula> peliculaOptional = repository.findById(id);
 
-        if (!peliculaOptional.isPresent()) {
+            if (!peliculaOptional.isPresent()) {
+                return new CustomResponse<>(
+                        null,
+                        true,
+                        400,
+                        "La película no existe"
+                );
+            }
+
+            repository.deleteById(id);
+            return new CustomResponse<>(
+                    null,
+                    false,
+                    200,
+                    "Pelicula eliminada!"
+            );
+        } catch (Exception e) {
+            e.printStackTrace(); // Loguea la excepción para diagnóstico
             return new CustomResponse<>(
                     null,
                     true,
-                    400,
-                    "La película no existe"
+                    500,
+                    "Error interno al intentar eliminar la película"
             );
         }
-
-        repository.deleteById(id);
-        return new CustomResponse<>(
-                null,
-                false,
-                200,
-                "Pelicula eliminada!"
-        );
     }
 
 }
