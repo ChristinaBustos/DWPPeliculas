@@ -21,10 +21,10 @@
               <b>Descripción:</b> {{ movie.description }}<br>
             </b-card-text>
 
-            <template  #footer>
-            <div class="icono">
-              <b-button variant="faded" @click="edit(movie)"><b-icon icon="pencil"></b-icon></b-button>
-            </div>
+            <template #footer>
+              <div class="icono">
+                <b-button variant="faded" @click="edit(movie)"><b-icon icon="pencil"></b-icon></b-button>
+              </div>
             </template>
           </b-card>
         </b-col>
@@ -32,7 +32,8 @@
     </div>
 
     <ModalSaveMovie />
-    <ModalUpdateMovie ref="modalUpdateMovie" :movie="selectedMovie"/>
+    <ModalUpdateMovie ref="modalUpdateMovie" :movie="selectedMovie" @movie-updated="fetchData" />
+
   </div>
 </template>
 
@@ -42,7 +43,7 @@ import ModalUpdateMovie from './ModalUpdateMovie.vue';
 import axios from 'axios'
 
 export default {
-  components: { ModalSaveMovie, ModalUpdateMovie},
+  components: { ModalSaveMovie, ModalUpdateMovie },
   name: "pelis",
   data() {
     return {
@@ -54,7 +55,6 @@ export default {
     fetchData() {
       axios.get('http://localhost:8090/api-movieBack/')
         .then(response => {
-          console.log(response.data.data);
           this.data = response.data;
         })
         .catch(error => {
@@ -62,9 +62,10 @@ export default {
         });
     },
 
+
     edit(movie) {
       this.selectedMovie = movie;
-      console.log("Props: ",movie);
+      console.log("Props enviadas: ", movie);
       this.$bvModal.show('modal-update-movie');
     },
   },
@@ -74,7 +75,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .body {
   padding-left: 50px;
   padding-right: 50px;
