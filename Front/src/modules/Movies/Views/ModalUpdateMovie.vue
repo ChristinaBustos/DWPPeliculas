@@ -6,36 +6,37 @@
             </header>
 
             <main>
-                <form id="editarPelicula">
+                <form id="editarPelicula" @submit.prevent="updateMovie">
                     <b-row>
                         <b-col>
                             <label for="pelicula">Nombre de la película: *</label>
-                            <b-form-input v-model="pelicula.name" type="text" class="form-control" placeholder="Película..."
-                                required></b-form-input>
+                            <b-form-input v-model="editedMovie.name" type="text" class="form-control"
+                                placeholder="Película..." required></b-form-input>
                         </b-col>
                         <b-col>
                             <label for="pelicula">Género de la película: *</label>
-                            <b-form-select v-model="pelicula.genero" :options="options"></b-form-select>
+                            <b-form-select v-model="editedMovie.genero" :options="options"></b-form-select>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col>
                             <label for="pelicula">Descripción de la película: *</label>
-                            <b-form-textarea id="textarea" v-model="pelicula.description"
+                            <b-form-textarea v-model="editedMovie.description" id="textarea"
                                 placeholder="Describe la película..." rows="3" max-rows="6"></b-form-textarea>
                         </b-col>
                     </b-row>
+                    <b-button type="submit" class="d-none"></b-button>
                 </form>
             </main>
 
             <footer class="text-center mt-5">
                 <button class="btn m-1 cancel" @click="onClose" id="savemovie">Cancelar</button>
-                <button class="btn m-1 success" @click="save" id="savemovie" type="submit">Guardar</button>
+                <button class="btn m-1 success" @click="updateMovie" type="submit">Actualizar</button>
             </footer>
         </b-modal>
     </div>
 </template>
-  
+
 <script>
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -43,18 +44,10 @@ import axios from 'axios';
 export default {
     name: 'ModalUpdateMovie',
     props: {
-        movie: {
-            type: Object,
-            default: () => ({
-                name: '',
-                description: '',
-                genero: null,
-            }),
-        },
+        movie: Object,
     },
     data() {
         return {
-            pelicula: { ...this.movie },
             options: [
                 { value: null, text: 'Selecciona una opción' },
                 { value: 'Terror', text: 'Terror' },
@@ -66,32 +59,60 @@ export default {
                 { value: 'Documentales', text: 'Documentales' },
                 { value: 'Drama', text: 'Drama' },
             ],
+            editedMovie: {
+                name: '',
+                genero: null,
+                description: '',
+            },
         };
     },
     methods: {
         onClose() {
             this.$bvModal.hide('modal-update-movie');
-            this.pelicula.name = '';
-            this.pelicula.description = '';
-            this.pelicula.genero = null;
         },
-        async save() {
+        async updateMovie() {
             try {
-                console.log('Película a actualizar:', this.pelicula);
                 Swal.fire({
-                    title: 'Actualizada',
-                    text: 'La película se actualizó correctamente',
-                    icon: 'success',
+                    title: "¿Estás seguro de actualizar la película?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#008c6f',
+                    cancelButtonColor: '#e11c24',
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: 'Cancelar',
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        console.log("Pelicula a editar: ",this.editedMovie);
+                        await axios.put(`http://localhost:8090/api-movieBack/`, this.editedMovie);
+
+                        Swal.fire({
+                            title: 'Actualizada',
+                            text: 'La película se actualizó correctamente',
+                            icon: 'success',
+                        });
+
+                        this.onClose();
+                        this.$emit('movie-updated');  // Emitir un evento para notificar al componente padre
+                    }
                 });
-                this.onClose();
             } catch (error) {
                 console.error('Error al actualizar la película', error);
+                // Puedes mostrar un mensaje de error utilizando una librería de notificación o simplemente consola
             }
+        },
+    },
+    watch: {
+        movie: {
+            handler(newVal) {
+                // Actualizar el objeto editedMovie cuando cambia la película seleccionada
+                this.editedMovie = { ...newVal };
+            },
+            immediate: true,
         },
     },
 };
 </script>
-s
+
 <style scoped>
 .success {
     font-family: Cabin;
