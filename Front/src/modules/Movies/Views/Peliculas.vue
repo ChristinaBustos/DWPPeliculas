@@ -23,7 +23,7 @@
 
             <template  #footer>
             <div class="icono">
-              <b-button variant="faded" @click="edit"><b-icon icon="pencil"></b-icon></b-button>
+              <b-button variant="faded" @click="edit(movie)"><b-icon icon="pencil"></b-icon></b-button>
             </div>
             </template>
           </b-card>
@@ -32,19 +32,22 @@
     </div>
 
     <ModalSaveMovie />
+    <ModalUpdateMovie ref="modalUpdateMovie" :movie="selectedMovie"/>
   </div>
 </template>
 
 <script>
-import ModalSaveMovie from '@/modules/Movies/Views/ModalSaveMovie.vue'
+import ModalSaveMovie from '@/modules/Movies/Views/ModalSaveMovie.vue';
+import ModalUpdateMovie from './ModalUpdateMovie.vue';
 import axios from 'axios'
 
 export default {
-  components: { ModalSaveMovie },
+  components: { ModalSaveMovie, ModalUpdateMovie},
   name: "pelis",
   data() {
     return {
-      data: null
+      data: null,
+      selectedMovie: null,
     }
   },
   methods: {
@@ -59,9 +62,11 @@ export default {
         });
     },
 
-    edit(){
-      console.log("Jala el boton para editar xd");
-    }
+    edit(movie) {
+      this.selectedMovie = movie;
+      console.log("Props: ",movie);
+      this.$bvModal.show('modal-update-movie');
+    },
   },
   mounted() {
     this.fetchData();
