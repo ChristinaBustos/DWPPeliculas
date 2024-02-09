@@ -100,7 +100,7 @@ export default {
                             icon: "success"
                         });
                         this.onClose();
-                        window.location.reload();
+                        this.$emit('movie-updated');
                     } catch (error) {
                         console.log("Error al guardar la pelicula", error);
                     }

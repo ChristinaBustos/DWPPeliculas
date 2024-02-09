@@ -92,19 +92,17 @@ export default {
                         });
 
                         this.onClose();
-                        this.$emit('movie-updated');  // Emitir un evento para notificar al componente padre
+                        this.$emit('movie-updated');
                     }
                 });
             } catch (error) {
                 console.error('Error al actualizar la película', error);
-                // Puedes mostrar un mensaje de error utilizando una librería de notificación o simplemente consola
             }
         },
     },
     watch: {
         movie: {
             handler(newVal) {
-                // Actualizar el objeto editedMovie cuando cambia la película seleccionada
                 this.editedMovie = { ...newVal };
             },
             immediate: true,
