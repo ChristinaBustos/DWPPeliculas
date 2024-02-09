@@ -1,26 +1,22 @@
 <template>
   <div class="body">
 
-
-
     <br>
-
-    <div class="card">
-
       <template>
-  <div class="d-flex justify-content-between align-items-center">
-    <div>
-      <b>
-        <h3>Peliculas</h3>
-      </b>
-    </div>
-    <div class="bodybutton">
-      <b-button v-b-modal.modal-save-movie class="btnadd">
-        <b-icon icon="camera-reels"></b-icon> Registrar pelicula
-      </b-button>
-    </div>
-  </div>
-</template>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <b>
+              <h3>Peliculas <b-icon icon="camera-reels"></b-icon></h3> 
+            </b>
+          </div>
+          <div class="bodybutton">
+            <b-button v-b-modal.modal-save-movie class="btnadd">
+              <b-icon icon="plus"></b-icon> Registrar pelicula
+            </b-button>
+          </div>
+        </div>
+      </template>
+    <div class="">
       <br>
       <b-row v-if="data && data.data && data.data.length > 0">
         <b-col v-for="(movie, index) in data.data" :key="index" lg="3" md="6" sm="12">
@@ -149,7 +145,7 @@ export default {
 
 .card-text-scroll {
   max-height: 150px;
-  /* ajusta la altura máxima según tus necesidades */
   overflow-y: auto;
   /* añade una barra de desplazamiento vertical si es necesario */
-}</style>
+}
+</style>
