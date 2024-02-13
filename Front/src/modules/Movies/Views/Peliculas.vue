@@ -19,7 +19,7 @@
     <div class="mb-4">
       <b-row v-if="data && data.data && data.data.length > 0">
         <b-col v-for="(movie, index) in paginatedItems" :key="index" lg="3" md="6" sm="12">
-          <b-card :title="movie.name" style="max-width: 20rem; height: 17rem" class="mb-2">
+          <b-card :title="movie.name" style="width: 100%; height: 17rem" class="mb-2">
             <b-card-text class="card-text-scroll">
               <b>Género:</b> {{ movie.genero }}<br>
               <b>Descripción:</b> {{ movie.description }}<br>
@@ -73,7 +73,7 @@ export default {
     return {
       data: null,
       selectedMovie: null,
-      perPage: 4, 
+      perPage: 8, 
       currentPage: 1,
       perPageOptions: [4, 8, 12, 16]
     }
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     fetchData() {
-      axios.get('http://localhost:8090/api-movieBack/')
+      axios.get('http://localhost:8080/api-movieBack/')
         .then(response => {
           this.data = response.data;
         })
@@ -115,7 +115,7 @@ export default {
 
       if (confirmed.isConfirmed) {
         try {
-          const response = await axios.delete(`http://localhost:8090/api-movieBack/peliculas/${id}`);
+          const response = await axios.delete(`http://localhost:8080/api-movieBack/peliculas/${id}`);
           if (response.data.error) {
             console.error(response.data.message);
           } else {
@@ -145,17 +145,22 @@ export default {
 
 <style>
 .body {
-  padding-left: 50px;
-  padding-right: 50px;
-  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
 }
 
-.bodybutton {
-  text-align: end;
+@media screen and (max-width: 768px) {
+  .body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
+
 
 .btnadd {
   background-color: #089779;
+  padding-right: px;
 }
 
 .icono {

@@ -12,21 +12,40 @@
                             <b-col>
                                 <label for="pelicula">Nombre de la pelicula: *</label>
                                 <b-form-input v-model="pelicula.name" type="text" class="form-control"
-                                    placeholder="Pelicula..." required
+                                    placeholder="Pelicula..." required :state="validarName"
                                     aria-describedby="input-live-help input-live-feedback" />
+
+                                <b-form-invalid-feedback :state="validarName">
+                                    Formato invalido
+                                </b-form-invalid-feedback>
+
+
                             </b-col>
                             <b-col>
                                 <label for="pelicula">Genero de la pelicula: *</label>
-                                <b-form-select v-model="pelicula.genero" :options="options"></b-form-select>
+                                <b-form-select v-model="pelicula.genero" :state="validarGenero" :options="options"></b-form-select>
+
+                                <b-form-invalid-feedback :state="validarGenero">
+                                    Selecciona un género válido
+                                </b-form-invalid-feedback>
                             </b-col>
                         </b-row>
                         <b-row>
                             <b-col>
                                 <label for="pelicula">Descripción de la pelicula: *</label>
                                 <b-form-textarea id="textarea" v-model="pelicula.description"
-                                    placeholder="Describe la pelicula..." rows="3" max-rows="6"></b-form-textarea>
+                                    placeholder="Describe la pelicula..." rows="3" max-rows="6"
+                                    :state="validarDescription"></b-form-textarea>
+
+                                <b-form-invalid-feedback :state="validarDescription">
+                                    Formato invalido (Coloca el puntero en el icono de abajo para saber los lineamientos del formato)
+                                </b-form-invalid-feedback>
+
                             </b-col>
                         </b-row>
+                        <b-icon v-b-tooltip.hover="{ variant: 'info' }"
+                            title="En los campos no se aceptan caracteres especiales, no se permiten espacios en blanco, no se permite el campo vacio y no pueden ser mayores a 100 caracteres"
+                            icon="exclamation-circle-fill" variant="secondary"></b-icon>
                     </form>
 
                 </main>
@@ -35,7 +54,7 @@
                     <button class="btn m-1 cancel" @click="onClose" id="savemovie">
                         Cancelar
                     </button>
-                    <button class="btn m-1 success" @click="save" id="saveteam" type="submit">
+                    <button class="btn m-1 success" @click="save" id="saveteam" :disabled="!validarForm" type="submit">
                         Registrar
                     </button>
                 </footer>
@@ -70,7 +89,7 @@ export default {
                 { value: "Drama", text: "Drama" },
                 { value: 'Infantil', text: 'Infantil' },
             ],
-            
+
         };
     },
     methods: {
@@ -94,7 +113,7 @@ export default {
                 if (result.isConfirmed) {
                     try {
                         console.log(this.pelicula);
-                        await axios.post("http://localhost:8090/api-movieBack/", this.pelicula);
+                        await axios.post("http://localhost:8080/api-movieBack/", this.pelicula);
                         Swal.fire({
                             title: "¡Guardada!",
                             text: "La pelicula se registró correctamente",
@@ -110,8 +129,25 @@ export default {
             });
         },
 
-        
+
     },
+    computed: {
+        validarName() {
+            const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
+            return this.pelicula.name.length > 0 && this.pelicula.name.length < 100 && regex.test(this.pelicula.name);
+        },
+        validarDescription() {
+            const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
+            return this.pelicula.description.length > 0 && this.pelicula.description.length < 100 && regex.test(this.pelicula.description);
+        },
+        validarGenero() {
+            return this.pelicula.genero !== null;
+        },
+        validarForm() {
+            return this.validarName && this.validarDescription && this.validarGenero;
+        },
+
+    }
 
 }
 </script>
