@@ -13,7 +13,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-
+import '@asika32764/vue-animate/dist/vue-animate.css';
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
