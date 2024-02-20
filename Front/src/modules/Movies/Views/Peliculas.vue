@@ -16,28 +16,28 @@
       </div>
     </template>
 
-    <div class="mb-4">
-      <b-row v-if="data && data.data && data.data.length > 0">
-        <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
-          <b-col v-for="(movie, index) in paginatedItems" :key="index">
-            <b-card :title="movie.name" style="width: 28rem; height: 20rem" class="mb-4">
-              <b-card-text class="card-text-scroll">
-                <b>Género:</b> {{ movie.genero }}<br>
-                <b>Descripción:</b> {{ movie.description }}<br>
-              </b-card-text>
-              <template #footer>
-                <div class="icono">
-                  <b-button variant="faded" @click="OpenEditModal(movie)"><b-icon icon="pencil"></b-icon></b-button>
-                  <b-button variant="faded" style="color: red;" @click="deleteMovie(movie.id)"><b-icon
-                      icon="trash"></b-icon></b-button>
-                </div>
-              </template>
-            </b-card>
+    <div>
+
+      <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
+        <b-col v-for="(movie, index) in paginatedItems" :key="index">
+          <b-card :title="movie.name" style="height: 100%; width:auto">
+            <b-card-text class="card-text-scroll">
+              <b>Género:</b> {{ movie.genero }}<br>
+              <b>Descripción:</b> {{ movie.description }}<br>
+            </b-card-text>
+            <template #footer>
+              <div class="icono">
+                <b-button variant="faded" @click="OpenEditModal(movie)"><b-icon icon="pencil"></b-icon></b-button>
+                <b-button variant="faded" style="color: red;" @click="deleteMovie(movie.id)"><b-icon
+                    icon="trash"></b-icon></b-button>
+              </div>
+            </template>
+          </b-card>
           <br v-if="data.data.length > 4">
 
-          </b-col>
-        </TransitionGroup>
-      </b-row>
+        </b-col>
+      </TransitionGroup>
+
 
       <div class="text-center" v-if="!paginatedItems.length">
         <p>No se encontraron películas registradas</p>
@@ -77,9 +77,10 @@ export default {
     return {
       data: null,
       selectedMovie: null,
-      perPage: 8,
+      perPage: 4,
       currentPage: 1,
-      perPageOptions: [4, 8, 12, 16]
+      perPageOptions: [4, 8, 12, 16],
+      selectedGenre: null
     }
   },
   computed: {
@@ -94,7 +95,13 @@ export default {
   },
   methods: {
     fetchData() {
-      axios.get('http://localhost:8090/api-movieBack/')
+      let apiUrl = 'http://localhost:8080/api-movieBack/';
+
+      if (this.selectedGenre) {
+        apiUrl += `?genre=${this.selectedGenre}`;
+      }
+
+      axios.get(apiUrl)
         .then(response => {
           this.data = response.data;
         })
@@ -119,7 +126,7 @@ export default {
 
       if (confirmed.isConfirmed) {
         try {
-          const response = await axios.delete(`http://localhost:8090/api-movieBack/peliculas/${id}`);
+          const response = await axios.delete(`http://localhost:8080/api-movieBack/peliculas/${id}`);
           if (response.data.error) {
             console.error(response.data.message);
           } else {

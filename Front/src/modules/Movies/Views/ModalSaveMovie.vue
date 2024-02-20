@@ -23,11 +23,37 @@
                             </b-col>
                             <b-col>
                                 <label for="pelicula">Genero de la pelicula: *</label>
-                                <b-form-select v-model="pelicula.genero" :state="validarGenero" :options="options"></b-form-select>
+                                <b-form-select v-model="pelicula.genero" :state="validarGenero"
+                                    :options="options"></b-form-select>
 
                                 <b-form-invalid-feedback :state="validarGenero">
                                     Selecciona un género válido
                                 </b-form-invalid-feedback>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <label for="pelicula">Director de la pelicula: *</label>
+                                <b-form-input v-model="pelicula.director" type="text" class="form-control"
+                                    placeholder="Director..." required :state="validarDirector"
+                                    aria-describedby="input-live-help input-live-feedback" />
+
+                                <b-form-invalid-feedback :state="validarDirector">
+                                    Formato invalido
+                                </b-form-invalid-feedback>
+
+
+                            </b-col>
+                            <b-col>
+                                <label for="pelicula">Año de estreno: *</label>
+                                <b-form-input v-model="pelicula.dateCreation" type="date" class="form-control"
+                                    placeholder="2024..." required :state="validarFecha"
+                                    aria-describedby="input-live-help input-live-feedback" />
+
+                                <b-form-invalid-feedback :state="validarFecha">
+                                    {{ validarFecha ? 'Fecha no válida' : 'La fecha debe ser anterior a la fecha actual después del 22 de marzo de 1895' }}
+                                </b-form-invalid-feedback>
+
                             </b-col>
                         </b-row>
                         <b-row>
@@ -38,7 +64,8 @@
                                     :state="validarDescription"></b-form-textarea>
 
                                 <b-form-invalid-feedback :state="validarDescription">
-                                    Formato invalido (Coloca el puntero en el icono de abajo para saber los lineamientos del formato)
+                                    Formato invalido (Coloca el puntero en el icono de abajo para saber los lineamientos del
+                                    formato)
                                 </b-form-invalid-feedback>
 
                             </b-col>
@@ -74,6 +101,8 @@ export default {
             pelicula: {
                 name: "",
                 description: "",
+                director: "",
+                dateCreation: "",
                 genero: null,
             },
             selected: null,
@@ -97,7 +126,9 @@ export default {
             this.$bvModal.hide("modal-save-movie");
             this.pelicula.name = ""
             this.pelicula.description = ""
-            this.pelicula.genero = null
+            this.pelicula.genero = null,
+            this.pelicula.dateCreation = "",
+            this.pelicula.director = ""
 
         },
         async save() {
@@ -113,7 +144,7 @@ export default {
                 if (result.isConfirmed) {
                     try {
                         console.log(this.pelicula);
-                        await axios.post("http://localhost:8090/api-movieBack/", this.pelicula);
+                        await axios.post("http://localhost:8080/api-movieBack/", this.pelicula);
                         Swal.fire({
                             title: "¡Guardada!",
                             text: "La pelicula se registró correctamente",
@@ -136,6 +167,10 @@ export default {
             const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
             return this.pelicula.name.length > 0 && this.pelicula.name.length < 100 && regex.test(this.pelicula.name);
         },
+        validarDirector() {
+            const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
+            return this.pelicula.director.length > 0 && this.pelicula.director.length < 100 && regex.test(this.pelicula.director);
+        },
         validarDescription() {
             const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
             return this.pelicula.description.length > 0 && this.pelicula.description.length < 100 && regex.test(this.pelicula.description);
@@ -143,8 +178,17 @@ export default {
         validarGenero() {
             return this.pelicula.genero !== null;
         },
+        validarFecha() {
+            const selectedDate = new Date(this.pelicula.dateCreation);
+            const currentDate = new Date();
+            const minDate = new Date('1895-03-22');
+            return (
+                selectedDate <= currentDate && selectedDate >= minDate
+            );
+        },
+
         validarForm() {
-            return this.validarName && this.validarDescription && this.validarGenero;
+            return this.validarName && this.validarDescription && this.validarGenero && this.validarFecha;
         },
 
     }
