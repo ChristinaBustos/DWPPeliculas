@@ -1,7 +1,10 @@
 package com.peliculas.peliculasBack.Service;
 
+import com.peliculas.peliculasBack.Dto.PeliculaDto;
 import com.peliculas.peliculasBack.Models.Pelicula;
 import com.peliculas.peliculasBack.Models.PeliculaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,5 +97,54 @@ public class PeliculaService {
             );
         }
     }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public CustomResponse<List<Pelicula>> findDirectorGenero(PeliculaDto dto) {
+        List<Pelicula> movie;
+        System.out.println("Service"+dto.getGenero());
+        movie = this.repository.findByGeneroContainingOrDirectorContaining(dto.getGenero(), dto.getDirector());
+        if (movie.isEmpty()) {
+            return new CustomResponse<>(
+                    null,
+                    true,
+                    400,
+                    "No se encontraron películas con el género y director especificados"
+            );
+        }
+
+        return new CustomResponse<>(
+                movie,
+                false,
+                200,
+                "OK"
+        );
+    }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public CustomResponse<List<Pelicula>> findByNameContaining(PeliculaDto dto) {
+        List<Pelicula> movie;
+        movie = this.repository.findByNameContaining(dto.getName());
+        if (movie.isEmpty()) {
+            return new CustomResponse<>(
+                    null,
+                    true,
+                    400,
+                    "No se encontraron películas con el nombre"
+            );
+        }
+
+        return new CustomResponse<>(
+                movie,
+                false,
+                200,
+                "OK"
+        );
+    }
+
+
+
+
 
 }

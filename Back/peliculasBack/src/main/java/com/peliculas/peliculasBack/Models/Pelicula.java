@@ -22,4 +22,6 @@ public class Pelicula {
     private String genero;
     @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
+    private String director;
 }

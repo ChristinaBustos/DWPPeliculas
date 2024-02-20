@@ -6,6 +6,9 @@ import com.peliculas.peliculasBack.Service.CustomResponse;
 import com.peliculas.peliculasBack.Service.PeliculaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.JpaEntityGraph;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +29,30 @@ public class PeliculaController {
                 this.service.getAll(),
                 HttpStatus.OK
         );
+    }
+
+    @PostMapping("/findNameDirector/")
+    public ResponseEntity<CustomResponse<List<Pelicula>>> findByGeneroDirector(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(
+                    null,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        CustomResponse<List<Pelicula>> moviesFilter = this.service.findDirectorGenero(dto);
+        return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/findName/")
+    public ResponseEntity<CustomResponse<List<Pelicula>>> findByNameContaining(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(
+                    null,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        CustomResponse<List<Pelicula>> moviesFilter = this.service.findByNameContaining(dto);
+        return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
     }
 
     @PostMapping("/")

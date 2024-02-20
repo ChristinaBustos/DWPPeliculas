@@ -19,13 +19,15 @@ public class PeliculaDto {
     private String name;
     private String genero;
     private String description;
+    private String director;
 
     public Pelicula getPelicula(){
         return new Pelicula(
                 getId(),
                 getName(),
                 getGenero(),
-                getDescription()
+                getDescription(),
+                getDirector()
         );
     }
 }
