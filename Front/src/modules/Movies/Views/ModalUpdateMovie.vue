@@ -99,9 +99,8 @@ export default {
                     cancelButtonText: 'Cancelar',
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        console.log('Pelicula a editar: ', this.editedMovie);
+                        console.log("Pelicula a editar: ",this.editedMovie);
                         await axios.put(`http://localhost:8080/api-movieBack/`, this.editedMovie);
-
                         Swal.fire({
                             title: 'Actualizada',
                             text: 'La película se actualizó correctamente',
@@ -129,16 +128,12 @@ export default {
         validarName() {
             const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
             return (
-                this.editedMovie.name.length > 0 &&
-                this.editedMovie.name.length < 100 &&
                 regex.test(this.editedMovie.name)
             );
         },
         validarDescription() {
             const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
             return (
-                this.editedMovie.description.length > 0 &&
-                this.editedMovie.description.length < 100 &&
                 regex.test(this.editedMovie.description)
             );
         },
