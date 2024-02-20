@@ -100,7 +100,7 @@ export default {
                 if (result.isConfirmed) {
                     try {
                         console.log(this.pelicula);
-                        await axios.post("http://localhost:8090/api-movieBack/", this.pelicula);
+                        await axios.post("http://localhost:8080/api-movieBack/", this.pelicula);
                         Swal.fire({
                             title: "¡Guardada!",
                             text: "La pelicula se registró correctamente",

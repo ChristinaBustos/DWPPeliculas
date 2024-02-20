@@ -18,6 +18,7 @@
 
     <div class="mb-4">
       <b-row v-if="data && data.data && data.data.length > 0">
+        <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
         <b-col v-for="(movie, index) in paginatedItems" :key="index" lg="3" md="3" sm="6">
           <b-card :title="movie.name" style="max-width: 20rem; height: 17rem" class="mb-2">
             <b-card-text class="card-text-scroll">
@@ -33,6 +34,7 @@
             </template>
           </b-card>
         </b-col>
+        </TransitionGroup>
       </b-row>
 
       <div class="text-center" v-if="!paginatedItems.length">
@@ -90,7 +92,7 @@ export default {
   },
   methods: {
     fetchData() {
-      axios.get('http://localhost:8090/api-movieBack/')
+      axios.get('http://localhost:8080/api-movieBack/')
         .then(response => {
           this.data = response.data;
         })
@@ -115,7 +117,7 @@ export default {
 
       if (confirmed.isConfirmed) {
         try {
-          const response = await axios.delete(`http://localhost:8090/api-movieBack/peliculas/${id}`);
+          const response = await axios.delete(`http://localhost:8080/api-movieBack/peliculas/${id}`);
           if (response.data.error) {
             console.error(response.data.message);
           } else {
