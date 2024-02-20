@@ -35,6 +35,25 @@
           </b-card>
         </b-col>
         </TransitionGroup>
+        <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
+          <b-col v-for="(movie, index) in paginatedItems" :key="index">
+            <b-card :title="movie.name" style="width: 28rem; height: 20rem" class="mb-4">
+              <b-card-text class="card-text-scroll">
+                <b>Género:</b> {{ movie.genero }}<br>
+                <b>Descripción:</b> {{ movie.description }}<br>
+              </b-card-text>
+              <template #footer>
+                <div class="icono">
+                  <b-button variant="faded" @click="OpenEditModal(movie)"><b-icon icon="pencil"></b-icon></b-button>
+                  <b-button variant="faded" style="color: red;" @click="deleteMovie(movie.id)"><b-icon
+                      icon="trash"></b-icon></b-button>
+                </div>
+              </template>
+            </b-card>
+          <br v-if="data.data.length > 4">
+
+          </b-col>
+        </TransitionGroup>
       </b-row>
 
       <div class="text-center" v-if="!paginatedItems.length">
@@ -75,7 +94,7 @@ export default {
     return {
       data: null,
       selectedMovie: null,
-      perPage: 4, 
+      perPage: 8,
       currentPage: 1,
       perPageOptions: [4, 8, 12, 16]
     }
@@ -125,6 +144,7 @@ export default {
               title: 'Eliminada',
               text: 'La película se eliminó correctamente',
               icon: 'success',
+              timer: 3000
             });
             this.fetchData();
           }
@@ -147,9 +167,16 @@ export default {
 
 <style>
 .body {
-  padding-left: 50px;
-  padding-right: 50px;
-  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 
