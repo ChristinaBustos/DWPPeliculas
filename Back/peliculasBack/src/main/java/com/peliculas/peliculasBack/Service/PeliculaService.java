@@ -102,8 +102,8 @@ public class PeliculaService {
     @Transactional(rollbackFor = {SQLException.class})
     public CustomResponse<List<Pelicula>> findDirectorGenero(PeliculaDto dto) {
         List<Pelicula> movie;
-        System.out.println("Service"+dto.getGenero());
-        movie = this.repository.findByGeneroContainingOrDirectorContaining(dto.getGenero(), dto.getDirector());
+        System.out.println("Service"+dto.getGenero()+ dto.getDirector()+dto.getName());
+        movie = this.repository.findByGeneroContainingOrDirectorContainingOrNameContaining(dto.getGenero(), dto.getDirector(),dto.getName());
         if (movie.isEmpty()) {
             return new CustomResponse<>(
                     null,
@@ -122,26 +122,7 @@ public class PeliculaService {
     }
 
 
-    @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<List<Pelicula>> findByNameContaining(PeliculaDto dto) {
-        List<Pelicula> movie;
-        movie = this.repository.findByNameContaining(dto.getName());
-        if (movie.isEmpty()) {
-            return new CustomResponse<>(
-                    null,
-                    true,
-                    400,
-                    "No se encontraron películas con el nombre"
-            );
-        }
 
-        return new CustomResponse<>(
-                movie,
-                false,
-                200,
-                "OK"
-        );
-    }
 
 
 

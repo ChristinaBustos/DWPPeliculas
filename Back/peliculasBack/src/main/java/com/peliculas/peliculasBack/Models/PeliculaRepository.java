@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface PeliculaRepository extends JpaRepository<Pelicula,Long> {
     Optional<Pelicula> findByName(String Name);
-    List<Pelicula> findByGeneroContainingOrDirectorContaining(String Genero, String Director);
-    List<Pelicula> findByNameContaining(String Name);
-
+    List<Pelicula> findByGeneroContainingOrDirectorContainingOrNameContaining(String Genero, String Director,String Name);
 
 }

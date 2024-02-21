@@ -31,8 +31,8 @@ public class PeliculaController {
         );
     }
 
-    @PostMapping("/findNameDirector/")
-    public ResponseEntity<CustomResponse<List<Pelicula>>> findByGeneroDirector(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
+    @PostMapping("/findFilter/")
+    public ResponseEntity<CustomResponse<List<Pelicula>>> findByFilter(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(
                     null,
@@ -40,18 +40,6 @@ public class PeliculaController {
             );
         }
         CustomResponse<List<Pelicula>> moviesFilter = this.service.findDirectorGenero(dto);
-        return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/findName/")
-    public ResponseEntity<CustomResponse<List<Pelicula>>> findByNameContaining(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(
-                    null,
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-        CustomResponse<List<Pelicula>> moviesFilter = this.service.findByNameContaining(dto);
         return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
     }
 

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "movies")
 @NoArgsConstructor
@@ -24,4 +26,5 @@ public class Pelicula {
     private String description;
     @Column(nullable = false)
     private String director;
+
 }
