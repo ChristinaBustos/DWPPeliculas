@@ -16,14 +16,24 @@
       </div>
     </template>
 
+  
+      <div class="mb-3">
+        <label for="genreInput" class="mr-2">Buscar género o director:</label>
+        <b-form-input v-model="selectedGenre" id="genreInput" placeholder="Buscar..."></b-form-input>
+        <b-button @click="filterMovies" class="ml-2">Buscar</b-button>
+      </div>
+
+
     <div>
 
       <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
         <b-col v-for="(movie, index) in paginatedItems" :key="index">
           <b-card :title="movie.name" style="height: 100%; width:auto">
             <b-card-text class="card-text-scroll">
+              <b>Director:</b> {{ movie.director }}<br>
               <b>Género:</b> {{ movie.genero }}<br>
               <b>Descripción:</b> {{ movie.description }}<br>
+              <b>Fecha de estreno:</b> {{ movie.publishDate }}<br>
             </b-card-text>
             <template #footer>
               <div class="icono">
@@ -33,7 +43,6 @@
               </div>
             </template>
           </b-card>
-          <br v-if="data.data.length > 4">
 
         </b-col>
       </TransitionGroup>
@@ -59,7 +68,7 @@
     </div>
 
     <ModalSaveMovie @movie-updated="fetchData" />
-    <ModalUpdateMovie ref="modalUpdateMovie" :movie="selectedMovie" @movie-updated="fetchData" />
+    <ModalUpdateMovie ref="ModalUpdateMovie" :movie="selectedMovie" @movie-updated="fetchData" />
 
   </div>
 </template>
@@ -75,12 +84,13 @@ export default {
   name: "pelis",
   data() {
     return {
+      selectedGenre: null,
+      genreInput: null,
       data: null,
       selectedMovie: null,
       perPage: 4,
       currentPage: 1,
-      perPageOptions: [4, 8, 12, 16],
-      selectedGenre: null
+      perPageOptions: [4, 8, 12, 16]
     }
   },
   computed: {
@@ -95,15 +105,21 @@ export default {
   },
   methods: {
     fetchData() {
-      let apiUrl = 'http://localhost:8080/api-movieBack/';
+      let apiUrl = 'http://localhost:8080/api-movieBack/findFilter/';
 
-      if (this.selectedGenre) {
-        apiUrl += `?genre=${this.selectedGenre}`;
-      }
+      const requestData = {
+        name: 'dgdfgfdgd',
+        description: 'dgfdgd',
+        genero: this.selectedGenre || null,
+        director: this.selectedGenre , 
+        firstDate: '2023-08-01',
+        twoDate: '2023-10-18'
+      };
 
-      axios.get(apiUrl)
+      axios.post(apiUrl, requestData)
         .then(response => {
           this.data = response.data;
+          console.log(this.data);
         })
         .catch(error => {
           console.error('Error al obtener datos de la API', error);
@@ -147,6 +163,10 @@ export default {
           });
         }
       }
+    },
+    filterMovies() {
+      this.currentPage = 1;
+      this.fetchData();
     },
   },
   mounted() {
