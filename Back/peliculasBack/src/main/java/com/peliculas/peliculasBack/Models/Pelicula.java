@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -26,5 +27,7 @@ public class Pelicula {
     private String description;
     @Column(nullable = false)
     private String director;
+    @Column(columnDefinition = "DATE", nullable = false)
+    LocalDate publishDate;
 
 }

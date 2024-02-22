@@ -43,6 +43,18 @@ public class PeliculaController {
         return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
     }
 
+    @PostMapping("/findRangeDates/")
+    public ResponseEntity<CustomResponse<List<Pelicula>>> findByRangeDates(@Valid @RequestBody PeliculaDto dto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(
+                    null,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        CustomResponse<List<Pelicula>> moviesFilter = this.service.findRangeDates(dto);
+        return new ResponseEntity<>(moviesFilter, HttpStatus.CREATED);
+    }
+
     @PostMapping("/")
     public ResponseEntity<CustomResponse<Pelicula>> insert(@Valid @RequestBody PeliculaDto dto){
         return new ResponseEntity<>(

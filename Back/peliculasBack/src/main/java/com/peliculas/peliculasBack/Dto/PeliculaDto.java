@@ -3,6 +3,7 @@ package com.peliculas.peliculasBack.Dto;
 import com.peliculas.peliculasBack.Models.Pelicula;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,9 @@ public class PeliculaDto {
     private String genero;
     private String description;
     private String director;
+    private LocalDate firstDate;
+    private LocalDate twoDate;
+    private LocalDate publishDate;
 
     public Pelicula getPelicula(){
         return new Pelicula(
@@ -29,7 +33,11 @@ public class PeliculaDto {
                 getName(),
                 getGenero(),
                 getDescription(),
-                getDirector()
+                getDirector(),
+                getPublishDate()
         );
     }
+
+
+
 }

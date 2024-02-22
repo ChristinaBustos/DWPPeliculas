@@ -121,6 +121,26 @@ public class PeliculaService {
         );
     }
 
+    @Transactional(rollbackFor = {SQLException.class})
+    public CustomResponse<List<Pelicula>> findRangeDates(PeliculaDto dto) {
+        List<Pelicula> movie;
+        movie = this.repository.findByPublishDateBetween(dto.getFirstDate(),dto.getTwoDate());
+        if (movie.isEmpty()) {
+            return new CustomResponse<>(
+                    null,
+                    true,
+                    400,
+                    "No se encontraron películas con el rengo de fechas especificados"
+            );
+        }
+        return new CustomResponse<>(
+                movie,
+                false,
+                200,
+                "OK"
+        );
+    }
+
 
 
 
