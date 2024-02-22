@@ -31,6 +31,7 @@
                                 </b-form-invalid-feedback>
                             </b-col>
                         </b-row>
+
                         <b-row>
                             <b-col>
                                 <label for="pelicula">Director de la pelicula: *</label>
@@ -45,8 +46,8 @@
 
                             </b-col>
                             <b-col>
-                                <label for="pelicula">Año de estreno: *</label>
-                                <b-form-input v-model="pelicula.dateCreation" type="date" class="form-control"
+                                <label for="pelicula">Fecha de estreno: *</label>
+                                <b-form-input v-model="pelicula.publishDate" type="date" class="form-control"
                                     placeholder="2024..." required :state="validarFecha"
                                     aria-describedby="input-live-help input-live-feedback" />
 
@@ -99,11 +100,12 @@ export default {
     data() {
         return {
             pelicula: {
+                id: null,
                 name: "",
                 description: "",
                 director: "",
-                dateCreation: "",
-                genero: null,
+                genero: null, 
+                publishDate: null 
             },
             selected: null,
             options: [
@@ -127,8 +129,8 @@ export default {
             this.pelicula.name = ""
             this.pelicula.description = ""
             this.pelicula.genero = null,
-            this.pelicula.dateCreation = "",
-            this.pelicula.director = ""
+                this.pelicula.dateCreation = "",
+                this.pelicula.director = ""
 
         },
         async save() {
@@ -179,7 +181,7 @@ export default {
             return this.pelicula.genero !== null;
         },
         validarFecha() {
-            const selectedDate = new Date(this.pelicula.dateCreation);
+            const selectedDate = new Date(this.pelicula.publishDate);
             const currentDate = new Date();
             const minDate = new Date('1895-03-22');
             return (

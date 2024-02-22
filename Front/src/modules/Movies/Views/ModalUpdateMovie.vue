@@ -25,6 +25,30 @@
                             </b-form-invalid-feedback>
                         </b-col>
                     </b-row>
+
+                    <b-row>
+                            <b-col>
+                                <label for="pelicula">Director de la pelicula: *</label>
+                                <b-form-input v-model="editedMovie.director" type="text" class="form-control"
+                                    placeholder="Director..." required :state="validarDirector"
+                                    aria-describedby="input-live-help input-live-feedback" />
+
+                                <b-form-invalid-feedback :state="validarDirector">
+                                    Formato invalido
+                                </b-form-invalid-feedback>
+
+
+                            </b-col>
+                            <b-col>
+                                <label for="pelicula">Año de estreno: *</label>
+                                <b-form-input v-model="editedMovie.publishDate" type="date" class="form-control"
+                                    placeholder="2024..." required 
+                                    aria-describedby="input-live-help input-live-feedback" />
+
+                            </b-col>
+                        </b-row>
+
+
                     <b-row>
                         <b-col>
                             <label for="pelicula">Descripción de la película: *</label>
@@ -140,9 +164,13 @@ export default {
         validarGenero() {
             return this.editedMovie.genero !== null;
         },
+        validarDirector() {
+            const regex = /^(?!.*[\s]{2,})(?!^\s)(?!.*\s$)(?!.*(\S)\1{2,})[a-zA-Z0-9\s\-_.,]*$/;
+            return  regex.test(this.editedMovie.director);
+        },
         validarForm() {
             return (
-                this.validarName && this.validarDescription && this.validarGenero
+                this.validarName && this.validarDescription && this.validarGenero && this.validarDirector
             );
         },
     },
