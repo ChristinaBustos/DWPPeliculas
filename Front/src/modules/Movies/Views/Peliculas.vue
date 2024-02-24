@@ -16,16 +16,35 @@
       </div>
     </template>
 
-  
-      <div class="mb-3">
-        <label for="genreInput" class="mr-2">Buscar género o director:</label>
-        <b-form-input v-model="selectedGenre" id="genreInput" placeholder="Buscar..."></b-form-input>
-        <b-button @click="filterMovies" class="ml-2">Buscar</b-button>
-      </div>
-
+    <b-row>
+      <b-col>
+        <div class="col-12 d-flex align-items-center">
+          <label for="genreInput" class="mr-2"></label>
+          <b-form-input v-model="selectedGenre" id="genreInput" placeholder="Buscar género o director..."
+            class="mr-2"></b-form-input>
+          <b-button @click="filterMovies" variant="faded" class="btn btn-secundary">
+            <b-icon icon="search" aria-hidden="true"></b-icon>
+          </b-button>
+        </div>
+      </b-col>
+      <b-col>
+        <div class="col-12 d-flex align-items-center">
+          <label for="datepicker-full-width">Desde:</label>
+          <b-form-datepicker id="datepicker-full-width" v-model="firstDate" menu-class="w-100" calendar-width="100%"
+            class="mb-2"></b-form-datepicker>
+        </div>
+      </b-col>
+      <b-col>
+        <div class="col-12 d-flex align-items-center">
+          <label for="datepicker-full-width">Hasta:</label>
+          <b-form-datepicker id="datepicker-full-width" v-model="twoDate" menu-class="w-100" calendar-width="100%"
+            class="mb-2"></b-form-datepicker>
+        </div>
+      </b-col>
+    </b-row>
+    <br>
 
     <div>
-
       <TransitionGroup name="roll" tag="div" class="d-flex d-fixed">
         <b-col v-for="(movie, index) in paginatedItems" :key="index">
           <b-card :title="movie.name" style="height: 100%; width:auto">
@@ -84,6 +103,8 @@ export default {
   name: "pelis",
   data() {
     return {
+      firstDate: '',
+      twoDate: '',
       selectedGenre: null,
       genreInput: null,
       data: null,
@@ -105,15 +126,15 @@ export default {
   },
   methods: {
     fetchData() {
-      let apiUrl = 'http://localhost:8080/api-movieBack/findFilter/';
+      let apiUrl = 'http://localhost:8090/api-movieBack/findFilter/';
 
       const requestData = {
         name: 'dgdfgfdgd',
         description: 'dgfdgd',
         genero: this.selectedGenre || null,
-        director: this.selectedGenre , 
-        firstDate: '2023-08-01',
-        twoDate: '2023-10-18'
+        director: this.selectedGenre,
+        firstDate: '1895-03-22',
+        twoDate: '1895-03-22'
       };
 
       axios.post(apiUrl, requestData)

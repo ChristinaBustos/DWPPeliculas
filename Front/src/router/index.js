@@ -20,8 +20,12 @@ const router = new VueRouter({
     {
       path: '/peliculas',
       name: 'peliculas',
-
       component: () => import('../modules/Movies/Views/Peliculas.vue')
+    },
+    {
+      path: '/dragform',
+      name: 'dragform',
+      component: () => import('../modules/DragAndAnimations/Views/Form.vue')
     }
   ]
 })
