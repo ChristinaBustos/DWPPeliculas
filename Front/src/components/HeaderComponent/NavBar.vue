@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <b-navbar toggleable="lg" type="dark" class="navbar">
+      <b-navbar toggleable="lg" type="dark" class="navbar" fixed-top>
         <b-navbar-brand to="inicio">CrisPelis</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -9,6 +9,7 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <b-nav-item to="peliculas">Peliculas</b-nav-item>
+            <b-nav-item to="dragform">Animaciones</b-nav-item>
       
           </b-navbar-nav>
 
