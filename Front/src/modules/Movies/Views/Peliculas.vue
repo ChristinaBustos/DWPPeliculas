@@ -5,7 +5,7 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <b>
-            <h3>Peliculas <b-icon icon="camera-reels"></b-icon></h3>
+            <h3>Peliculas CRUD <b-icon icon="camera-reels"></b-icon></h3>
           </b>
         </div>
         <div class="bodybutton">
@@ -16,32 +16,6 @@
       </div>
     </template>
 
-    <b-row>
-      <b-col>
-        <div class="col-12 d-flex align-items-center">
-          <label for="genreInput" class="mr-2"></label>
-          <b-form-input v-model="selectedGenre" id="genreInput" placeholder="Buscar género o director..."
-            class="mr-2"></b-form-input>
-          <b-button @click="filterMovies" variant="faded" class="btn btn-secundary">
-            <b-icon icon="search" aria-hidden="true"></b-icon>
-          </b-button>
-        </div>
-      </b-col>
-      <b-col>
-        <div class="col-12 d-flex align-items-center">
-          <label for="datepicker-full-width">Desde:</label>
-          <b-form-datepicker id="datepicker-full-width" v-model="firstDate" menu-class="w-100" calendar-width="100%"
-            class="mb-2"></b-form-datepicker>
-        </div>
-      </b-col>
-      <b-col>
-        <div class="col-12 d-flex align-items-center">
-          <label for="datepicker-full-width">Hasta:</label>
-          <b-form-datepicker id="datepicker-full-width" v-model="twoDate" menu-class="w-100" calendar-width="100%"
-            class="mb-2"></b-form-datepicker>
-        </div>
-      </b-col>
-    </b-row>
     <br>
 
     <div>
@@ -126,24 +100,13 @@ export default {
   },
   methods: {
     fetchData() {
-      let apiUrl = 'http://localhost:8090/api-movieBack/findFilter/';
-
-      const requestData = {
-        name: 'dgdfgfdgd',
-        description: 'dgfdgd',
-        genero: this.selectedGenre || null,
-        director: this.selectedGenre,
-        firstDate: '1895-03-22',
-        twoDate: '1895-03-22'
-      };
-
-      axios.post(apiUrl, requestData)
-        .then(response => {
+      axios
+        .get("http://localhost:8080/api-movieBack/")
+        .then((response) => {
           this.data = response.data;
-          console.log(this.data);
         })
-        .catch(error => {
-          console.error('Error al obtener datos de la API', error);
+        .catch((error) => {
+          console.error("Error al obtener datos de la API", error);
         });
     },
     OpenEditModal(movie) {

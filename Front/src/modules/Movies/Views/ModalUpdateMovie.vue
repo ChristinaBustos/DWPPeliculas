@@ -124,7 +124,7 @@ export default {
                 }).then(async (result) => {
                     if (result.isConfirmed) {
                         console.log("Pelicula a editar: ",this.editedMovie);
-                        await axios.put(`http://localhost:8090/api-movieBack/`, this.editedMovie);
+                        await axios.put(`http://localhost:8080/api-movieBack/`, this.editedMovie);
                         Swal.fire({
                             title: 'Actualizada',
                             text: 'La película se actualizó correctamente',
